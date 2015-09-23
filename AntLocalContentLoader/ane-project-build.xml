@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ane-project" default="idea-install">
+
+    <property file="../build.properties"/>
+
+    <property name="placeholder.ant.project.name" value="[ANT_PROJECT_NAME]"/>
+    <property name="placeholder.ant.support.dir" value="[ANT_SUPPORT]"/>
+    <property name="placeholder.project.name" value="[PROJECT_NAME]"/>
+    <property name="placeholder.project.name.lower" value="[PROJECT_NAME_LOWER]"/>
+    <property name="placeholder.air.sdk.version" value="[AIR_VERSION]"/>
+    <property name="placeholder.release.out.dir" value="[OUTPUT]"/>
+    <property name="placeholder.android.lib.root.dir" value="[JAVA_PROJECT]"/>
+    <property name="placeholder.flash.lib.root.dir" value="[AS_PROJECT]"/>
+    <property name="placeholder.flash.player.version" value="[FLASH_PLAYER_VERSION]"/>
+    <property name="placeholder.flash.flex.sdk.name" value="[FLEX_SDK_NAME]"/>
+    <property name="placeholder.android.sdk.version" value="[ANDROID_SDK_VERSION]"/>
+
+    <target name="idea-install" description="Prepare template for concrete project">
+        <first-lower property="name.lower" value="${name}"/>
+        <basename property="project.dir.name" file="${basedir}"/>
+        <parallel>
+            <prepare-ant-build projectName="${project.dir.name}"/>
+            <rename-source from="${basedir}/${placeholder.ant.support.dir}" to="${basedir}/${ant.support.dir}"/>
+            <prepare-root-module projectName="${project.dir.name}"/>
+            <prepare-extension-xml nameLower="${name.lower}"/>
+            <sequential>
+                <parallel>
+                    <prepare-java-module/>
+                    <prepare-as-module/>
+                    <prepare-java-manifest nameLower="${name.lower}"/>
+                    <prepare-java-source nameLower="${name.lower}"/>
+                    <prepare-as-source nameLower="${name.lower}"/>
+                </parallel>
+                <move-idea-modules projectName="${project.dir.name}"/>
+            </sequential>
+        </parallel>
+    </target>
+
+    <macrodef name="prepare-ant-build">
+        <attribute name="projectName"/>
+        <sequential>
+            <replace file="${basedir}/build.xml" token="${placeholder.ant.project.name}" value="@{projectName}"/>
+            <replace file="${basedir}/build.xml" token="${placeholder.ant.support.dir}" value="${ant.support.dir}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-extension-xml">
+        <attribute name="nameLower"/>
+        <sequential>
+            <replace file="${basedir}/extension.xml" token="${placeholder.project.name}" value="${name}"/>
+            <replace file="${basedir}/extension.xml" token="${placeholder.air.sdk.version}" value="${air.sdk.version}"/>
+            <replace file="${basedir}/extension.xml" token="${placeholder.project.name.lower}" value="@{nameLower}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-root-module">
+        <attribute name="projectName"/>
+        <sequential>
+            <replace file="${basedir}/@{projectName}.iml" token="${placeholder.release.out.dir}" value="${release.out.dir}"/>
+            <replace file="${basedir}/@{projectName}.iml" token="${placeholder.ant.support.dir}" value="${ant.support.dir}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-java-module">
+        <sequential>
+            <replace file="${basedir}/${placeholder.android.lib.root.dir}/${placeholder.android.lib.root.dir}.iml"
+                     token="${placeholder.release.out.dir}" value="${release.out.dir}"/>
+            <replace file="${basedir}/${placeholder.android.lib.root.dir}/${placeholder.android.lib.root.dir}.iml"
+                     token="${placeholder.android.lib.root.dir}" value="${android.lib.root.dir}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-as-module">
+        <sequential>
+            <basename property="flash.flex.sdk.name" file="${flash.flex.sdk}"/>
+            <replace file="${basedir}/${placeholder.flash.lib.root.dir}/${placeholder.flash.lib.root.dir}.iml"
+                     token="${placeholder.release.out.dir}" value="${release.out.dir}"/>
+            <replace file="${basedir}/${placeholder.flash.lib.root.dir}/${placeholder.flash.lib.root.dir}.iml"
+                     token="${placeholder.flash.lib.root.dir}" value="${flash.lib.root.dir}"/>
+            <replace file="${basedir}/${placeholder.flash.lib.root.dir}/${placeholder.flash.lib.root.dir}.iml"
+                     token="${placeholder.flash.player.version}" value="${flash.player.version}"/>
+            <replace file="${basedir}/${placeholder.flash.lib.root.dir}/${placeholder.flash.lib.root.dir}.iml"
+                     token="${placeholder.flash.flex.sdk.name}" value="${flash.flex.sdk.name}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-java-manifest">
+        <attribute name="nameLower"/>
+        <sequential>
+            <replace file="${basedir}/${placeholder.android.lib.root.dir}/AndroidManifest.xml"
+                     token="${placeholder.project.name.lower}" value="@{nameLower}"/>
+            <replace file="${basedir}/${placeholder.android.lib.root.dir}/AndroidManifest.xml"
+                     token="${placeholder.android.sdk.version}" value="${android.sdk.version}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-java-source">
+        <attribute name="nameLower"/>
+        <sequential>
+            <parallel>
+                <mkdir dir="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/base"/>
+                <mkdir dir="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/functions"/>
+                <replace-in-source src="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/${placeholder.project.name}FREContext.java"
+                                   nameLower="@{nameLower}"/>
+                <replace-in-source src="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/${placeholder.project.name}FREExtension.java"
+                                   nameLower="@{nameLower}"/>
+            </parallel>
+            <parallel>
+                <rename-source from="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/${placeholder.project.name}FREContext.java"
+                               to="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/${name}FREContext.java"/>
+                <rename-source from="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/${placeholder.project.name}FREExtension.java"
+                               to="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}/api/${name}FREExtension.java"/>
+            </parallel>
+            <rename-source from="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/${placeholder.project.name.lower}"
+                           to="${basedir}/${placeholder.android.lib.root.dir}/src/com/trembit/@{nameLower}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="prepare-as-source">
+        <attribute name="nameLower"/>
+        <sequential>
+            <parallel>
+                <mkdir dir="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/data"/>
+                <replace-in-source src="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/I${placeholder.project.name}.as"
+                                   nameLower="@{nameLower}"/>
+                <replace-in-source src="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/events/${placeholder.project.name}Event.as"
+                                   nameLower="@{nameLower}"/>
+                <replace-in-source src="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.main}/com/trembit/${placeholder.project.name.lower}/${placeholder.project.name}.as"
+                                   nameLower="@{nameLower}"/>
+                <replace-in-source src="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.default}/com/trembit/${placeholder.project.name.lower}/${placeholder.project.name}.as"
+                                   nameLower="@{nameLower}"/>
+            </parallel>
+            <parallel>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/I${placeholder.project.name}.as"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/I${name}.as"/>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/events/${placeholder.project.name}Event.as"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}/events/${name}Event.as"/>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.main}/com/trembit/${placeholder.project.name.lower}/${placeholder.project.name}.as"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.main}/com/trembit/${placeholder.project.name.lower}/${name}.as"/>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.default}/com/trembit/${placeholder.project.name.lower}/${placeholder.project.name}.as"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.default}/com/trembit/${placeholder.project.name.lower}/${name}.as"/>
+            </parallel>
+            <parallel>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/${placeholder.project.name.lower}"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.common}/com/trembit/@{nameLower}"/>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.main}/com/trembit/${placeholder.project.name.lower}"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.main}/com/trembit/@{nameLower}"/>
+                <rename-source from="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.default}/com/trembit/${placeholder.project.name.lower}"
+                               to="${basedir}/${placeholder.flash.lib.root.dir}/${flash.lib.src.default}/com/trembit/@{nameLower}"/>
+            </parallel>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="move-idea-modules">
+        <attribute name="projectName"/>
+        <sequential>
+            <replace file="${basedir}/.idea/modules.xml" token="${placeholder.android.lib.root.dir}" value="${android.lib.root.dir}"/>
+            <replace file="${basedir}/.idea/modules.xml" token="${placeholder.flash.lib.root.dir}" value="${flash.lib.root.dir}"/>
+            <parallel>
+                <rename-source from="${placeholder.android.lib.root.dir}/${placeholder.android.lib.root.dir}.iml"
+                               to="${placeholder.android.lib.root.dir}/${android.lib.root.dir}.iml"/>
+                <rename-source from="${placeholder.flash.lib.root.dir}/${placeholder.flash.lib.root.dir}.iml"
+                               to="${placeholder.flash.lib.root.dir}/${flash.lib.root.dir}.iml"/>
+            </parallel>
+            <parallel>
+                <rename-source from="${placeholder.android.lib.root.dir}" to="${android.lib.root.dir}"/>
+                <rename-source from="${placeholder.flash.lib.root.dir}" to="${flash.lib.root.dir}"/>
+            </parallel>
+            <replace file="${basedir}/.idea/modules.xml">
+                <replacetoken><![CDATA[</modules>]]></replacetoken>
+                <replacevalue><![CDATA[    <module fileurl="file://$PROJECT_DIR$/[JAVA_MODULE]/[JAVA_MODULE].iml" filepath="$PROJECT_DIR$/[JAVA_MODULE]/[JAVA_MODULE].iml" />
+      <module fileurl="file://$PROJECT_DIR$/[AS_MODULE]/[AS_MODULE].iml" filepath="$PROJECT_DIR$/[AS_MODULE]/[AS_MODULE].iml" />
+    </modules>]]></replacevalue>
+            </replace>
+            <replace file="${basedir}/.idea/modules.xml" token="[JAVA_MODULE]" value="${android.lib.root.dir}"/>
+            <replace file="${basedir}/.idea/modules.xml" token="[AS_MODULE]" value="${flash.lib.root.dir}"/>
+            <replace file="${basedir}/.idea/modules.xml" token="${placeholder.ant.project.name}" value="@{projectName}"/>
+        </sequential>
+    </macrodef>
+
+    <scriptdef name="first-lower" language="javascript">
+        <attribute name="property"/>
+        <attribute name="value"/>
+        project.setNewProperty(attributes.get("property"),
+        attributes.get("value").substring(0,1).toLowerCase() + attributes.get("value").substring(1));
+    </scriptdef>
+
+    <macrodef name="rename-source">
+        <attribute name="from"/>
+        <attribute name="to"/>
+        <sequential>
+            <move file="@{from}" tofile="@{to}"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="replace-in-source">
+        <attribute name="src"/>
+        <attribute name="nameLower"/>
+        <sequential>
+            <replace file="@{src}" token="${placeholder.project.name}" value="${name}"/>
+            <replace file="@{src}" token="${placeholder.project.name.lower}" value="@{nameLower}"/>
+        </sequential>
+    </macrodef>
+</project>

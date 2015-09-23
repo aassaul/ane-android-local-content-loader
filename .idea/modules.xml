@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ASLocalContentLoader/ASLocalContentLoader.iml" filepath="$PROJECT_DIR$/ASLocalContentLoader/ASLocalContentLoader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaLocalContentLoader/JavaLocalContentLoader.iml" filepath="$PROJECT_DIR$/JavaLocalContentLoader/JavaLocalContentLoader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ane-android-local-content-loader.iml" filepath="$PROJECT_DIR$/ane-android-local-content-loader.iml" />
+    </modules>
+  </component>
+</project>

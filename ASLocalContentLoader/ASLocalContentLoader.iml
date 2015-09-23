@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="Flex" version="4">
+  <component name="FlexBuildConfigurationManager" active="ASLocalContentLoader">
+    <configurations>
+      <configuration name="ASLocalContentLoader" target-platform="Mobile" output-type="Library" output-file="ASLocalContentLoader.swc" output-folder="$MODULE_DIR$/../out/ASLocalContentLoader">
+        <dependencies target-player="18.0">
+          <sdk name="4.14.1.air-18.0" />
+        </dependencies>
+        <compiler-options />
+        <packaging-air-desktop />
+        <packaging-android />
+        <packaging-ios />
+      </configuration>
+    </configurations>
+    <compiler-options />
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/[src]" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/[src-common]" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/[src-default]" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="4.14.1.air-18.0" jdkType="Flex SDK Type (new)" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

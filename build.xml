@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ane-android-local-content-loader" default="all">
+
+    <property file="build.properties"/>
+
+    <import file="AntLocalContentLoader/android-build.xml"/>
+    <import file="AntLocalContentLoader/ios-build.xml"/>
+    <import file="AntLocalContentLoader/air-build.xml"/>
+    <import file="AntLocalContentLoader/ane-project-build.xml"/>
+
+	<target name="all" depends="android-release,swc-mobile,swc-default,package" description="Full build of extension"/>
+
+    <target name="package" description="Create the extension package">
+
+        <property name="adt" location="${flash.air.sdk}/bin/adt${bin.ext}"/>
+        <property name="extension.descriptor" value="extension.xml"/>
+
+        <copy file="${extension.descriptor}" todir="${internal.out.dir}" overwrite="true"/>
+
+        <exec executable="${adt}" failonerror="true" dir="${internal.out.dir}">
+            <arg value="-package"/>
+            <arg value="-target"/>
+            <arg value="ane"/>
+            <arg value="${name}.ane"/>
+            <arg value="${extension.descriptor}"/>
+            <arg line="-swc ${flash.lib.out.dir.name}/${name}.swc"/>
+            <!--arg line="-platform iPhone-ARM -platformoptions ../build/platform-ios.xml -C ios/ ."/-->
+            <!--arg line="-platform iPhone-x86 -C ios-simulator/ ."/-->
+            <arg line="-platform Android-ARM -C ${android.lib.out.dir.name}/ ."/>
+            <arg line="-platform default -C ${flash.lib.out.dir.default.name}/ ."/>
+        </exec>
+
+        <move file="${internal.out.dir}/${name}.ane" todir="${release.out.dir}"/>
+        <delete dir="${internal.out.dir}"/>
+    </target>
+
+</project>
