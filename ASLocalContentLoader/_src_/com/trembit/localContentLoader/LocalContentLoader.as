@@ -53,7 +53,6 @@ package com.trembit.localContentLoader {
 					}else{
 						uuid = checkResult;
 						currentLoaderContext = context;
-						trace("UUID", uuid);
 					}
 				}else{
 					extensionContext.removeEventListener(StatusEvent.STATUS, onContextStatus);
