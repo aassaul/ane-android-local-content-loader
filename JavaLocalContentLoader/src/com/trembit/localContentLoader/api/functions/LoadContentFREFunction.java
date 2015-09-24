@@ -2,6 +2,7 @@ package com.trembit.localContentLoader.api.functions;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
@@ -31,7 +32,9 @@ public final class LoadContentFREFunction implements FREFunction {
             String uriString = freObjects[0].getAsString();
             Uri uri = Uri.parse(uriString);
             if ("content".equals(uri.getScheme())) {
-                cursor = freContext.getActivity().getContentResolver().query(uri, URI_PROJECTION, null, null, null);
+                try{
+                    cursor = freContext.getActivity().getContentResolver().query(uri, URI_PROJECTION, null, null, null);
+                }catch (Exception e){/*skip query*/}
                 if (cursor != null && cursor.getCount() > 0) {
                     cursor.moveToFirst();
                     String fileUri = cursor.getString(cursor.getColumnIndex(DATA));

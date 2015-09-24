@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ASLocalContentLoader/ASLocalContentLoader.iml" filepath="$PROJECT_DIR$/ASLocalContentLoader/ASLocalContentLoader.iml" />
       <module fileurl="file://$PROJECT_DIR$/JavaLocalContentLoader/JavaLocalContentLoader.iml" filepath="$PROJECT_DIR$/JavaLocalContentLoader/JavaLocalContentLoader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestMobile/TestMobile.iml" filepath="$PROJECT_DIR$/TestMobile/TestMobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/ane-android-local-content-loader.iml" filepath="$PROJECT_DIR$/ane-android-local-content-loader.iml" />
     </modules>
   </component>

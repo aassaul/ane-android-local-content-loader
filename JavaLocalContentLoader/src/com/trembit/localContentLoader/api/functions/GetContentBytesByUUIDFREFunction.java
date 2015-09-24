@@ -21,6 +21,7 @@ public class GetContentBytesByUUIDFREFunction implements FREFunction {
             String uuid = freObjects[0].getAsString();
             ByteBuffer byteBuffer = LoadModel.getInstance().getBytesByUUID(uuid);
             FREByteArray byteArray = FREByteArray.newByteArray();
+            byteArray.setProperty("length", FREObject.newObject(byteBuffer.capacity()));
             byteArray.acquire();
             byteArray.getBytes().put(byteBuffer);
             byteArray.release();
@@ -32,6 +33,10 @@ public class GetContentBytesByUUIDFREFunction implements FREFunction {
         } catch (FREWrongThreadException e) {
             e.printStackTrace();
         } catch (FREASErrorException e) {
+            e.printStackTrace();
+        } catch (FREReadOnlyException e) {
+            e.printStackTrace();
+        } catch (FRENoSuchNameException e) {
             e.printStackTrace();
         }
         return null;

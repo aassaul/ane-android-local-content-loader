@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+ Created with IntelliJ IDEA.
+ User: Andrey Assaul
+ Date: 23.09.2015
+ Time: 18:23
+-->
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+        creationComplete="creationCompleteHandler(event)">
+    <fx:Script><![CDATA[
+        import com.trembit.localContentLoader.LocalContentLoader;
+
+        import mx.events.FlexEvent;
+
+        private function creationCompleteHandler(event:FlexEvent):void {
+            var loader:LocalContentLoader = new LocalContentLoader();
+            var request:URLRequest = new URLRequest("content://com.android.contacts/contacts/180/photo");
+            loader.contentLoaderInfo.addEventListener(Event.COMPLETE, function(event:Event):void{
+                bitmapImage.source = Bitmap(loader.content).bitmapData;
+                trace();
+            });
+            loader.load(request);
+        }
+        ]]></fx:Script>
+    <s:BitmapImage id="bitmapImage" horizontalCenter="0" verticalCenter="0"/>
+</s:View>

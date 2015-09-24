@@ -13,6 +13,8 @@ package com.trembit.localContentLoader {
 	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
 
+	import mx.utils.Base64Encoder;
+
 	public class LocalContentLoader extends Loader{
 
 		private static var extContext:ExtensionContext;
@@ -42,7 +44,7 @@ package com.trembit.localContentLoader {
 					}
 				}
 				extensionContext.addEventListener(StatusEvent.STATUS, onContextStatus);
-				var checkResult:String = String(extensionContext.call(ContextMethod.LOAD_CONTENT, uri));
+				var checkResult:String = extensionContext.call(ContextMethod.LOAD_CONTENT, uri) as String;
 				if(checkResult != null){
 					if(checkResult.indexOf("://") != -1){
 						var newRequest:URLRequest = new URLRequest(checkResult);
@@ -51,6 +53,7 @@ package com.trembit.localContentLoader {
 					}else{
 						uuid = checkResult;
 						currentLoaderContext = context;
+						trace("UUID", uuid);
 					}
 				}else{
 					extensionContext.removeEventListener(StatusEvent.STATUS, onContextStatus);
