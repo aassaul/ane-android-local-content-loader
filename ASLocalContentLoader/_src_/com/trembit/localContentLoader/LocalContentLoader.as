@@ -96,6 +96,9 @@ package com.trembit.localContentLoader {
 
 		private function processBytesLoaded():void{
 			var bytes:ByteArray = ByteArray(extensionContext.call(ContextMethod.GET_CONTENT_BYTES_BY_UUID, uuid));
+			if(currentLoaderContext){
+				currentLoaderContext.checkPolicyFile = false;
+			}
 			loadBytes(bytes, currentLoaderContext);
 			uuid = null;
 			currentLoaderContext = null;

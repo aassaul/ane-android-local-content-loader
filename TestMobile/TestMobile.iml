@@ -8,6 +8,9 @@
             <entry library-id="b8cb8886-287f-42f3-bfd8-d866364632ce">
               <dependency linkage="Merged" />
             </entry>
+            <entry library-id="e64d02b5-f9d0-4ff0-ba99-dd1b7749a0c7">
+              <dependency linkage="Merged" />
+            </entry>
           </entries>
           <sdk name="4.14.1.air-18.0" />
         </dependencies>
@@ -34,6 +37,17 @@
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="e64d02b5-f9d0-4ff0-ba99-dd1b7749a0c7" />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/libs" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" />
       </library>
     </orderEntry>
   </component>
